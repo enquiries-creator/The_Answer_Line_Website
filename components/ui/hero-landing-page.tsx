@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import CallButton from "@/components/call-button";
+import { Mic, Phone } from "lucide-react";
+import { DEMO_NUMBER, DEMO_TEL } from "@/components/call-button";
 
 const stats = [
   { value: "24/7", label: "Every call answered" },
@@ -46,25 +46,35 @@ export function AnswerlineHero({ videoSrc }: { videoSrc?: string }) {
             Auckland-made · Answers in 3 rings
           </span>
           <h1 className="mt-7 text-5xl font-light leading-[1.08] tracking-[-2px] sm:text-6xl lg:text-[76px]">
-            The call you miss
+            That missed call
             <br />
-            is the job you lose.
+            just cost you a job.
           </h1>
           <p className="mt-7 max-w-xl text-base leading-relaxed text-[#b8b8b8] sm:text-lg">
-            You’re under a house or up a ladder. Your phone rings, goes to
-            voicemail, and a $2,000 job books in with the next bloke. The
-            Answer Line picks up, gets the details, texts you the job.
+            Could’ve been $200. Could’ve been $3,000. You’ll never know —
+            because most callers don’t leave a voicemail. They hang up and
+            ring the next name on the list. The Answer Line picks up every
+            call, gets the details, and texts the job straight to you.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-6">
-            <CallButton align="start" />
             <Link
-              href="/#how-it-works"
+              href="/#talk-to-it"
+              className="flex items-center gap-2.5 rounded-md bg-[#0084ff] px-7 py-3.5 text-base font-medium text-white transition-all duration-200 hover:translate-x-0.5 hover:bg-[#0066cc]"
+            >
+              <Mic className="h-5 w-5" />
+              Talk to it right now
+            </Link>
+            <a
+              href={`tel:${DEMO_TEL}`}
               className="flex items-center gap-2 py-3 text-base font-medium text-[#b8b8b8] transition-colors duration-200 hover:text-white"
             >
-              How it works
-              <ArrowRight className="h-5 w-5" />
-            </Link>
+              <Phone className="h-4 w-4" />
+              {DEMO_NUMBER} — or ring the demo line
+            </a>
           </div>
+          <p className="mt-3 text-sm text-white/40">
+            No signup, no number to ring — it talks right on this page.
+          </p>
         </div>
 
         {/* Right: stats */}

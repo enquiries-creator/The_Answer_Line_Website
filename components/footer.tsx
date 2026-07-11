@@ -16,7 +16,7 @@ export default function Footer() {
           />
           <p className="mt-4 text-sm leading-relaxed text-white/50">
             Your phone, answered — every call, day or night. Job details texted
-            straight to you, so nothing rings through to your competitor.
+            straight to you, so the work you’ve earned actually reaches you.
           </p>
         </div>
         <div>
