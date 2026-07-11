@@ -34,9 +34,11 @@ Open http://localhost:3000.
 
 ## Deploy
 
+Push to `main` — the repo is connected to Vercel, and every push deploys to
+production at https://theanswerline.vercel.app automatically.
+
 ```bash
-npm run build      # sanity-check the build
-vercel --prod      # deploy to production
+npm run build      # optional: sanity-check the build locally first
 ```
 
 ## Notes
