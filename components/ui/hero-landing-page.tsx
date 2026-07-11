@@ -51,10 +51,9 @@ export function AnswerlineHero({ videoSrc }: { videoSrc?: string }) {
             just cost you a job.
           </h1>
           <p className="mt-7 max-w-xl text-base leading-relaxed text-[#b8b8b8] sm:text-lg">
-            Could’ve been $200. Could’ve been $3,000. You’ll never know —
-            because most callers don’t leave a voicemail. They hang up and
-            ring the next name on the list. The Answer Line picks up every
-            call, gets the details, and texts the job straight to you.
+            86% of callers won’t leave a voicemail. They ring the next name
+            on the list. The Answer Line picks up every call, gets the
+            details, and texts the job straight to you.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-6">
             <Link
