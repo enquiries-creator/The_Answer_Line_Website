@@ -81,9 +81,18 @@ export default function Home() {
             say whatever you’d say ringing a real business, and try to trip
             it up. Most people can’t.
           </p>
-          <div className="mt-10 min-h-[120px]">
-            <TalkWidget />
+          <div className="mx-auto mt-10 max-w-md rounded-2xl border border-blue-500/30 bg-blue-500/10 p-6 text-left">
+            <p className="text-sm leading-relaxed text-white/80">
+              It’s the phone button in the{" "}
+              <span className="font-semibold text-white">bottom-right corner</span>{" "}
+              of your screen. Press it, say g’day, and give it your best shot.
+            </p>
+            <p className="mt-3 text-xs text-white/50">
+              Uses your mic, right here in the browser. Nothing to install,
+              nothing to sign up for.
+            </p>
           </div>
+          <TalkWidget />
           <p className="mt-8 text-sm text-white/45">
             That’s the same voice your customers get. Every call, day or
             night, picked up in three rings.
