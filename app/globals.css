@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0c0e;
+  --foreground: #f4f5f7;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #2563eb;
+  color: #fff;
+}
+
+@keyframes hero-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6vw, -4vh, 0) scale(1.15);
+  }
+  100% {
+    transform: translate3d(-4vw, 3vh, 0) scale(0.95);
+  }
+}
+
+.hero-blob {
+  animation: hero-drift 16s ease-in-out infinite alternate;
+}
+
+.hero-blob-slow {
+  animation: hero-drift 24s ease-in-out infinite alternate-reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-blob,
+  .hero-blob-slow {
+    animation: none;
+  }
+}
