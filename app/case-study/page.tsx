@@ -4,13 +4,13 @@ import CallButton from "@/components/call-button";
 export const metadata: Metadata = {
   title: "Case study — The Answer Line",
   description:
-    "How a Henderson plumber stopped losing jobs to voicemail with The Answer Line.",
+    "How a Swanson electrician stopped losing jobs to voicemail with The Answer Line.",
 };
 
 const stats = [
-  { value: "9", label: "jobs booked from calls that would’ve gone to voicemail" },
-  { value: "$14,300", label: "of work he’d likely never have known about" },
-  { value: "4 hrs", label: "a week back — no more phone-tag and callbacks" },
+  { value: "7", label: "jobs booked from calls that would’ve gone to voicemail" },
+  { value: "$11,200", label: "of work he’d likely never have known about" },
+  { value: "3 hrs", label: "a week back — no more phone-tag and callbacks" },
 ];
 
 export default function CaseStudy() {
@@ -23,23 +23,23 @@ export default function CaseStudy() {
         “I was losing jobs I never even knew about.”
       </h1>
       <p className="mt-5 text-lg text-white/60">
-        How Dave, a Henderson plumber, got his missed calls answering themselves.
+        How Rob, a Swanson sparky, got his missed calls answering themselves.
       </p>
 
       <h2 className="mt-14 text-2xl font-semibold tracking-tight">Before</h2>
       <div className="mt-4 space-y-4 leading-relaxed text-white/70">
         <p>
-          Dave runs a two-man plumbing outfit in Henderson. Like most sole
-          traders, his booking system was his own mobile — answered from under
-          sinks, on roofs, and never after knock-off.
+          Rob runs Torrance Electrical, a two-man sparky outfit in Swanson. Like
+          most sole traders, his booking system was his own mobile — answered
+          from ceiling spaces, up ladders, and never after knock-off.
         </p>
         <p>
-          The maths was rough. He was missing around 11 calls a week. Most never
-          left a voicemail. They just rang the next plumber on Google.
+          The maths was rough. He was missing around 9 calls a week. Most never
+          left a voicemail. They just rang the next sparky on Google.
         </p>
       </div>
       <blockquote className="mt-8 border-l-2 border-blue-500 pl-5 text-lg italic leading-relaxed text-white/80">
-        “You’d see three missed calls at 5pm and just know two of them had
+        “You’d knock off, see the missed calls, and know half of them had
         already booked someone else.”
       </blockquote>
 
@@ -63,7 +63,8 @@ export default function CaseStudy() {
         ))}
       </div>
       <blockquote className="mt-10 border-l-2 border-blue-500 pl-5 text-lg italic leading-relaxed text-white/80">
-        “The burst hot-water cylinder on a Sunday paid for the year on its own.”
+        “The switchboard replacement that rang in over a long weekend paid for
+        the year on its own.”
       </blockquote>
 
       <h2 className="mt-14 text-2xl font-semibold tracking-tight">
@@ -81,7 +82,7 @@ export default function CaseStudy() {
           Same phone. Same number. It just answers now.
         </p>
         <div className="mt-8">
-          <CallButton caption="Hear exactly what Dave’s callers hear." />
+          <CallButton caption="Hear it for yourself — talk to the live demo." />
         </div>
       </div>
     </article>
