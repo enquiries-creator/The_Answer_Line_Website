@@ -2,7 +2,6 @@
 
 import { Mic } from "lucide-react";
 import HeroTrial from "@/components/hero-trial";
-import HeroCallPlayer from "@/components/hero-call-player";
 
 export function AnswerlineHero() {
   return (
@@ -52,8 +51,6 @@ export function AnswerlineHero() {
             </p>
           </div>
 
-          {/* Real recorded call: play button + reactive bars; transcript fades into the hero */}
-          <HeroCallPlayer />
         </div>
 
         {/* Right: the live trial */}
