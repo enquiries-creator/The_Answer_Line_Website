@@ -50,6 +50,7 @@ export default function HeroCallPlayer() {
   const barRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [time, setTime] = useState(0);
   const [started, setStarted] = useState(false);
 
@@ -137,6 +138,7 @@ export default function HeroCallPlayer() {
       if (!bufferRef.current) {
         setLoading(true);
         const res = await fetch("/dave-best-call.mp3");
+        if (!res.ok) throw new Error(`fetch ${res.status}`);
         const raw = await res.arrayBuffer();
         bufferRef.current = await ctxRef.current.decodeAudioData(raw);
         setLoading(false);
@@ -144,9 +146,11 @@ export default function HeroCallPlayer() {
       const buf = bufferRef.current;
       const from = offsetRef.current >= buf.duration - 0.25 ? 0 : offsetRef.current;
       if (from === 0) setTime(0);
+      setFailed(false);
       playFrom(from);
     } catch {
       setLoading(false);
+      setFailed(true);
     }
   };
 
@@ -184,11 +188,13 @@ export default function HeroCallPlayer() {
             ))}
           </span>
           <span className="text-sm font-medium text-white/90">
-            {loading
-              ? "Loading the call…"
-              : playing
-                ? "Playing — a real recorded call"
-                : "Hear it handle a real call"}
+            {failed
+              ? "Couldn't load the audio — tap to retry"
+              : loading
+                ? "Loading the call…"
+                : playing
+                  ? "Playing — a real recorded call"
+                  : "Hear it handle a real call"}
           </span>
         </button>
       </div>
