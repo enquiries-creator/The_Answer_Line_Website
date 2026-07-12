@@ -34,8 +34,7 @@ export default function About() {
           answered, every time, and the job details land in your pocket.
         </p>
         <p>
-          If you want to talk to the human behind it, ring the demo line and
-          ask it to pass you on, or email{" "}
+          If you want to talk to the human behind it, email{" "}
           <a
             href="mailto:hello@theanswerline.kiwi"
             className="text-blue-300 hover:text-blue-200"
@@ -46,7 +45,7 @@ export default function About() {
         </p>
       </div>
       <div className="mt-14">
-        <CallButton caption="Give the demo a call — see what your callers would get." />
+        <CallButton caption="Talk to the demo — see what your callers would get." />
       </div>
     </div>
   );

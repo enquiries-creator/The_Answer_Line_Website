@@ -1,17 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { Mic, Phone } from "lucide-react";
-import { DEMO_NUMBER, DEMO_TEL } from "@/components/call-button";
-
-const stats = [
-  { value: "24/7", label: "Every call answered" },
-  { value: "3 rings", label: "Average time to pick up" },
-];
+import { Mic } from "lucide-react";
+import HeroTrial from "@/components/hero-trial";
 
 export function AnswerlineHero({ videoSrc }: { videoSrc?: string }) {
   return (
-    <section className="relative flex min-h-svh items-end overflow-hidden bg-[#0a0a0a] pb-16 pt-40 sm:pb-20">
+    <section className="relative flex min-h-svh items-center overflow-hidden bg-[#0a0a0a] pb-16 pt-32 sm:pb-20">
       {/* Background: video if provided, otherwise animated blue atmosphere */}
       {videoSrc ? (
         <video
@@ -38,53 +32,39 @@ export function AnswerlineHero({ videoSrc }: { videoSrc?: string }) {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0b0c0e] to-transparent" />
       </div>
 
-      <div className="relative z-[2] mx-auto flex w-full max-w-[1400px] flex-col items-start justify-between gap-14 px-6 sm:px-12 lg:flex-row lg:items-end lg:gap-8">
+      <div className="relative z-[2] mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-16 px-6 sm:px-12 lg:flex-row lg:items-center lg:gap-10">
         {/* Left: headline + CTA */}
-        <div className="max-w-[800px]">
+        <div className="max-w-[720px]">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-4 py-1.5 text-xs font-medium text-white/70 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             Auckland-made · Answers in 3 rings
           </span>
-          <h1 className="mt-7 text-5xl font-light leading-[1.08] tracking-[-2px] sm:text-6xl lg:text-[76px]">
+          <h1 className="mt-7 text-5xl font-light leading-[1.08] tracking-[-2px] sm:text-6xl lg:text-[72px]">
             That missed call
             <br />
             just cost you a job.
           </h1>
           <p className="mt-7 max-w-xl text-base leading-relaxed text-[#b8b8b8] sm:text-lg">
-            86% of callers won’t leave a voicemail. They ring the next name
+            86% of callers won&rsquo;t leave a voicemail. They ring the next name
             on the list. The Answer Line picks up every call, gets the
             details, and texts the job straight to you.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-6">
-            <Link
-              href="/#talk-to-it"
+            <button
+              onClick={() => window.dispatchEvent(new Event("al:try"))}
               className="flex items-center gap-2.5 rounded-md bg-[#0084ff] px-7 py-3.5 text-base font-medium text-white transition-all duration-200 hover:translate-x-0.5 hover:bg-[#0066cc]"
             >
               <Mic className="h-5 w-5" />
               Talk to it right now
-            </Link>
-            <a
-              href={`tel:${DEMO_TEL}`}
-              className="flex items-center gap-2 py-3 text-base font-medium text-[#b8b8b8] transition-colors duration-200 hover:text-white"
-            >
-              <Phone className="h-4 w-4" />
-              {DEMO_NUMBER} — or ring the demo line
-            </a>
+            </button>
           </div>
           <p className="mt-3 text-sm text-white/40">
-            No signup, no number to ring — it talks right on this page.
+            Right here on this page — nothing to install, no number to ring.
           </p>
         </div>
 
-        {/* Right: stats */}
-        <div className="flex items-end gap-12 lg:gap-20">
-          {stats.map((s) => (
-            <div key={s.value} className="text-left lg:text-center">
-              <div className="text-5xl font-light leading-none sm:text-[64px]">{s.value}</div>
-              <div className="mt-3 text-base font-normal text-[#b8b8b8]">{s.label}</div>
-            </div>
-          ))}
-        </div>
+        {/* Right: the live trial */}
+        <HeroTrial />
       </div>
     </section>
   );

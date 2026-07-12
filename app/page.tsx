@@ -1,7 +1,5 @@
 import Link from "next/link";
-import CallButton, { DEMO_NUMBER, DEMO_TEL } from "@/components/call-button";
 import { AnswerlineHero } from "@/components/ui/hero-landing-page";
-import TalkWidget from "@/components/talk-widget";
 
 const steps = [
   {
@@ -52,7 +50,7 @@ const testimonials = [
     detail: "Photographer, Grey Lynn",
   },
   {
-    quote: "I was sceptical as. Rang the demo line to try and trip it up and it handled me better than my old receptionist.",
+    quote: "I was sceptical as. Talked to the demo to try and trip it up and it handled me better than my old receptionist.",
     name: "Mike T.",
     detail: "Electrician, Papakura",
   },
@@ -68,37 +66,6 @@ export default function Home() {
     <>
       {/* Hero */}
       <AnswerlineHero />
-
-      {/* Live demo widget */}
-      <section id="talk-to-it" className="scroll-mt-24 border-b border-white/10">
-        <div className="mx-auto max-w-3xl px-6 py-24 text-center">
-          <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-            Don’t believe a robot can do this? Talk to it.
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl leading-relaxed text-white/60">
-            You’ve heard “AI phone systems” before — press 1, hold the line,
-            robot voice reading a script. This isn’t that. Press the button,
-            say whatever you’d say ringing a real business, and try to trip
-            it up. Most people can’t.
-          </p>
-          <div className="mx-auto mt-10 max-w-md rounded-2xl border border-blue-500/30 bg-blue-500/10 p-6 text-left">
-            <p className="text-sm leading-relaxed text-white/80">
-              It’s the phone button in the{" "}
-              <span className="font-semibold text-white">bottom-right corner</span>{" "}
-              of your screen. Press it, say g’day, and give it your best shot.
-            </p>
-            <p className="mt-3 text-xs text-white/50">
-              Uses your mic, right here in the browser. Nothing to install,
-              nothing to sign up for.
-            </p>
-          </div>
-          <TalkWidget />
-          <p className="mt-8 text-sm text-white/45">
-            That’s the same voice your customers get. Every call, day or
-            night, picked up in three rings.
-          </p>
-        </div>
-      </section>
 
       {/* What a missed call actually costs */}
       <section className="border-b border-white/10 bg-white/[0.02]">
@@ -161,10 +128,11 @@ export default function Home() {
                 That’s exactly what they get.
               </p>
               <div className="mt-8 rounded-2xl border border-blue-500/30 bg-blue-500/10 p-5 text-sm leading-relaxed text-white/80">
-                Still not sure? Ring the demo line and judge it yourself:{" "}
-                <a href={`tel:${DEMO_TEL}`} className="font-semibold text-blue-300 hover:text-blue-200">
-                  {DEMO_NUMBER}
-                </a>
+                Still not sure?{" "}
+                <Link href="/#try-it" className="font-semibold text-blue-300 hover:text-blue-200">
+                  Talk to it at the top of this page
+                </Link>{" "}
+                and judge it yourself.
               </div>
             </div>
             <ul className="space-y-4">
@@ -230,25 +198,21 @@ export default function Home() {
             The next missed call is coming. Decide who answers it.
           </h2>
           <p className="mx-auto mt-5 max-w-xl leading-relaxed text-white/60">
-            Talk to the agent above, or ring the demo line and have a crack at
+            Talk to the agent at the top of the page and have a crack at
             stumping it. If you wouldn’t trust it with your callers, don’t buy
             it. No lock-in contracts, no setup marathon — most businesses are
             live in a couple of days.
           </p>
           <div className="mt-10 flex flex-col items-center gap-5">
             <Link
-              href="/#talk-to-it"
+              href="/#try-it"
               className="rounded-md bg-[#0084ff] px-7 py-3.5 text-base font-medium text-white transition-colors hover:bg-[#0066cc]"
             >
               🎙 Talk to it now
             </Link>
             <p className="text-sm text-white/50">
-              <a href={`tel:${DEMO_TEL}`} className="text-white/70 hover:text-white">
-                {DEMO_NUMBER}
-              </a>{" "}
-              ·{" "}
               <Link href="/contact" className="text-blue-300 hover:text-blue-200">
-                Or set up a free demo for your own business →
+                Or get your own version built — free →
               </Link>
             </p>
           </div>

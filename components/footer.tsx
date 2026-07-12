@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { DEMO_NUMBER, DEMO_TEL } from "@/components/call-button";
 
 export default function Footer() {
   return (
@@ -29,12 +28,12 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <p className="text-xs font-medium uppercase tracking-widest text-white/40">Try it</p>
+          <p className="text-xs font-medium uppercase tracking-widest text-white/40">Get in touch</p>
           <ul className="mt-4 space-y-2.5 text-sm text-white/60">
             <li>
-              <a href={`tel:${DEMO_TEL}`} className="hover:text-white">
-                Demo line: {DEMO_NUMBER}
-              </a>
+              <Link href="/#try-it" className="hover:text-white">
+                Talk to the demo agent
+              </Link>
             </li>
             <li>
               <a href="mailto:hello@theanswerline.kiwi" className="hover:text-white">
@@ -46,7 +45,7 @@ export default function Footer() {
         <div>
           <p className="text-xs font-medium uppercase tracking-widest text-white/40">The honest bit</p>
           <p className="mt-4 text-sm leading-relaxed text-white/50">
-            Auckland-based, run by a real person you can ring. No lock-in
+            Auckland-based, run by a real person you can reach. No lock-in
             contracts, no hard sell.
           </p>
         </div>

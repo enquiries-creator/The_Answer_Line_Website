@@ -60,3 +60,51 @@ body {
     animation: none;
   }
 }
+
+/* ---- Talk-to-it orb ---- */
+
+.orb .orb-glow {
+  transform: scale(calc(1 + var(--level, 0) * 0.25));
+  opacity: calc(0.55 + var(--level, 0) * 0.45);
+  transition: opacity 0.1s linear;
+  will-change: transform, opacity;
+}
+
+.orb .orb-ring {
+  transform: scale(calc(1 + var(--level, 0) * 0.09));
+  opacity: calc(0.4 + var(--level, 0) * 0.6);
+  will-change: transform, opacity;
+}
+
+.orb.orb-idle .orb-glow {
+  animation: orb-breathe 5s ease-in-out infinite alternate;
+}
+
+.orb .orb-spin {
+  animation: orb-rotate 12s linear infinite;
+  opacity: calc(0.55 + var(--level, 0) * 0.45);
+}
+
+@keyframes orb-breathe {
+  from {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  to {
+    transform: scale(1.09);
+    opacity: 0.8;
+  }
+}
+
+@keyframes orb-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb .orb-glow,
+  .orb .orb-spin {
+    animation: none;
+  }
+}
