@@ -7,8 +7,6 @@ import { ConversationProvider, useConversation } from "@elevenlabs/react";
 
 type Phase = "idle" | "form" | "connecting" | "live" | "ended" | "done";
 
-const MAX_SECONDS = 300;
-
 export default function HeroTrial() {
   return (
     <ConversationProvider>
@@ -22,16 +20,16 @@ function HeroTrialInner() {
   const [error, setError] = useState<string | null>(null);
   const [lead, setLead] = useState({ name: "", email: "", phone: "" });
   const [followUp, setFollowUp] = useState({ website: "", notes: "" });
-  const [secondsLeft, setSecondsLeft] = useState(MAX_SECONDS);
+  const [maxSeconds, setMaxSeconds] = useState(120);
+  const [secondsLeft, setSecondsLeft] = useState(120);
+  const [hadFreeGo, setHadFreeGo] = useState(false);
   const [busy, setBusy] = useState(false);
   const orbRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const endRef = useRef<() => void>(() => {});
 
   const conversation = useConversation({
-    onConnect: () => {
-      setSecondsLeft(MAX_SECONDS);
-      setPhase("live");
-    },
+    onConnect: () => setPhase("live"),
     onDisconnect: () => setPhase((p) => (p === "live" ? "ended" : p)),
     onError: () => {
       setError("The call dropped — give it another go.");
@@ -39,6 +37,7 @@ function HeroTrialInner() {
     },
   });
   const { status, isSpeaking } = conversation;
+  endRef.current = () => conversation.endSession();
 
   // Voice-reactive glow: feed the agent's output volume into a CSS variable.
   useEffect(() => {
@@ -56,65 +55,89 @@ function HeroTrialInner() {
     return () => cancelAnimationFrame(raf);
   }, [phase, conversation]);
 
-  // Call timer (display only — the agent itself hangs up at the cap).
+  // Countdown; the free go is client-ended, longer goes the agent caps itself.
   useEffect(() => {
     if (phase !== "live") return;
-    const id = setInterval(() => setSecondsLeft((s) => Math.max(0, s - 1)), 1000);
+    const id = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          clearInterval(id);
+          endRef.current();
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
     return () => clearInterval(id);
   }, [phase]);
 
-  // Lets the headline CTA open the trial from anywhere on the page.
+  // Lets the headline CTA start the trial from anywhere on the page.
   useEffect(() => {
     const open = () => {
-      setPhase((p) => (p === "idle" || p === "ended" ? "form" : p));
       wrapRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+      document.getElementById("try-it-cta")?.click();
     };
     window.addEventListener("al:try", open);
     return () => window.removeEventListener("al:try", open);
   }, []);
 
-  async function startCall(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function requestCall(kind: "open-trial" | "trial", extra: Record<string, string> = {}) {
     setError(null);
-    const hp = (new FormData(e.currentTarget).get("company") as string) || "";
     setPhase("connecting");
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kind: "trial", ...lead, company: hp }),
+        body: JSON.stringify({ kind, ...extra }),
       });
       const data = await res.json();
+      if (data.gate) {
+        // Free taste used — swap to the details form for another go.
+        setHadFreeGo(true);
+        setPhase("form");
+        return;
+      }
       if (!res.ok) throw new Error(data.error || "Something went wrong — try again.");
       if (!data.token) throw new Error("Couldn't start the call — try again in a minute.");
       try {
         await navigator.mediaDevices.getUserMedia({ audio: true });
       } catch {
         throw new Error(
-          "The call needs your mic. Allow microphone access in your browser and press start again."
+          "The call needs your mic. Allow microphone access in your browser and try again."
         );
       }
+      const cap = data.maxSeconds || 120;
+      setMaxSeconds(cap);
+      setSecondsLeft(cap);
       await conversation.startSession({ conversationToken: data.token });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong — try again.");
-      setPhase("form");
+      setPhase(kind === "trial" ? "form" : "idle");
     }
+  }
+
+  async function startGatedCall(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const hp = (new FormData(e.currentTarget).get("company") as string) || "";
+    await requestCall("trial", { ...lead, company: hp });
   }
 
   async function sendFollowUp(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
     setError(null);
+    const hp = (new FormData(e.currentTarget).get("company") as string) || "";
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kind: "callback", ...lead, ...followUp }),
+        body: JSON.stringify({ kind: "callback", ...lead, ...followUp, company: hp }),
       });
-      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "That didn't send — give it another go.");
       setPhase("done");
-    } catch {
-      setError("That didn't send — give it another go.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "That didn't send — give it another go.");
     } finally {
       setBusy(false);
     }
@@ -123,6 +146,9 @@ function HeroTrialInner() {
   const talking = status === "connected" && isSpeaking;
   const mins = Math.floor(secondsLeft / 60);
   const secs = String(secondsLeft % 60).padStart(2, "0");
+
+  const inputCls =
+    "w-full rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#0084ff]";
 
   return (
     <div ref={wrapRef} id="try-it" className="flex w-full max-w-md scroll-mt-28 flex-col items-center">
@@ -177,27 +203,34 @@ function HeroTrialInner() {
         {phase === "idle" && (
           <div className="flex flex-col items-center text-center">
             <button
-              onClick={() => setPhase("form")}
+              id="try-it-cta"
+              onClick={() => requestCall("open-trial")}
               className="flex items-center gap-2.5 rounded-full bg-[#0084ff] px-8 py-4 text-base font-semibold text-white shadow-[0_0_50px_rgba(0,132,255,0.45)] transition-all duration-200 hover:scale-[1.03] hover:bg-[#0066cc]"
             >
               <Mic className="h-5 w-5" />
               Talk to the agent
             </button>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/55">
+            <p className="mt-3 text-xs font-medium text-white/45">
+              Free go · no sign-up · starts straight away
+            </p>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/55">
               This is the simulated after-hours line for{" "}
               <span className="text-white/80">Dave&rsquo;s Plumbing</span> — a made-up
               Henderson plumber. Say what you&rsquo;d say ringing a real one, and try to
               trip it up.
             </p>
+            {error && <p className="mt-3 text-xs leading-relaxed text-red-400">{error}</p>}
           </div>
         )}
 
         {phase === "form" && (
-          <form onSubmit={startCall} className="rounded-2xl border border-white/15 bg-black/50 p-5 backdrop-blur">
-            <p className="text-sm font-semibold text-white">Quick one before it picks up</p>
+          <form onSubmit={startGatedCall} className="rounded-2xl border border-white/15 bg-black/50 p-5 backdrop-blur">
+            <p className="text-sm font-semibold text-white">
+              {hadFreeGo ? "Keen for another go?" : "Quick one before it picks up"}
+            </p>
             <p className="mt-1 text-xs leading-relaxed text-white/50">
-              Keeps the bots off the line — and we&rsquo;ll send you your own free version
-              after you&rsquo;ve tried it.
+              Chuck your details in and you&rsquo;ll get more time with it — and we&rsquo;ll
+              send you your own free version to keep.
             </p>
             <div className="mt-4 space-y-3">
               <input
@@ -207,7 +240,7 @@ function HeroTrialInner() {
                 placeholder="Your name"
                 value={lead.name}
                 onChange={(e) => setLead({ ...lead, name: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#0084ff]"
+                className={inputCls}
               />
               <input
                 type="email"
@@ -215,7 +248,7 @@ function HeroTrialInner() {
                 placeholder="Email"
                 value={lead.email}
                 onChange={(e) => setLead({ ...lead, email: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#0084ff]"
+                className={inputCls}
               />
               <input
                 type="tel"
@@ -223,7 +256,7 @@ function HeroTrialInner() {
                 placeholder="Mobile (e.g. 027 123 4567)"
                 value={lead.phone}
                 onChange={(e) => setLead({ ...lead, phone: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#0084ff]"
+                className={inputCls}
               />
               <input
                 type="text"
@@ -279,17 +312,50 @@ function HeroTrialInner() {
             <div className="mt-4 space-y-3">
               <input
                 type="text"
+                required
+                minLength={2}
+                placeholder="Your name"
+                value={lead.name}
+                onChange={(e) => setLead({ ...lead, name: e.target.value })}
+                className={inputCls}
+              />
+              <input
+                type="email"
+                required
+                placeholder="Email"
+                value={lead.email}
+                onChange={(e) => setLead({ ...lead, email: e.target.value })}
+                className={inputCls}
+              />
+              <input
+                type="tel"
+                required
+                placeholder="Mobile"
+                value={lead.phone}
+                onChange={(e) => setLead({ ...lead, phone: e.target.value })}
+                className={inputCls}
+              />
+              <input
+                type="text"
                 placeholder="Your website (if you've got one)"
                 value={followUp.website}
                 onChange={(e) => setFollowUp({ ...followUp, website: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#0084ff]"
+                className={inputCls}
               />
               <textarea
                 rows={3}
                 placeholder="Anything it'd need to know that's not on your website? e.g. no payments over the phone — just capture the job and I ring back · what counts as an emergency · service area"
                 value={followUp.notes}
                 onChange={(e) => setFollowUp({ ...followUp, notes: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-black/30 px-4 py-3 text-sm leading-relaxed text-white placeholder:text-white/30 outline-none transition focus:border-[#0084ff]"
+                className={`${inputCls} leading-relaxed`}
+              />
+              <input
+                type="text"
+                name="company"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hidden"
               />
             </div>
             {error && <p className="mt-3 text-xs text-red-400">{error}</p>}
@@ -300,13 +366,22 @@ function HeroTrialInner() {
             >
               {busy ? "Sending…" : "Build mine — free"}
             </button>
-            <button
-              type="button"
-              onClick={() => setPhase("idle")}
-              className="mt-2 w-full py-1 text-xs text-white/40 transition hover:text-white/70"
-            >
-              Nah, just having a look
-            </button>
+            <div className="mt-2 flex justify-center gap-5 text-xs">
+              <button
+                type="button"
+                onClick={() => requestCall("open-trial")}
+                className="py-1 text-white/40 transition hover:text-white/70"
+              >
+                One more go
+              </button>
+              <button
+                type="button"
+                onClick={() => setPhase("idle")}
+                className="py-1 text-white/40 transition hover:text-white/70"
+              >
+                Nah, just looking
+              </button>
+            </div>
           </form>
         )}
 
