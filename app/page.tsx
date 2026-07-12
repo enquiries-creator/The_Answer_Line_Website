@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Mic } from "lucide-react";
 import { AnswerlineHero } from "@/components/ui/hero-landing-page";
 
 const steps = [
@@ -67,27 +68,7 @@ export default function Home() {
       {/* Hero */}
       <AnswerlineHero />
 
-      {/* What a missed call actually costs */}
-      <section className="border-b border-white/10 bg-white/[0.02]">
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <h2 className="max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
-            What a missed call actually costs
-          </h2>
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            {costs.map((c) => (
-              <div
-                key={c.title}
-                className="rounded-2xl border border-white/10 bg-[#121417] p-6"
-              >
-                <h3 className="text-lg font-semibold">{c.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/55">{c.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
+      {/* How it works — straight after the hero */}
       <section id="how-it-works" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-blue-400">
           How it works
@@ -106,10 +87,44 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <div className="mt-14 flex flex-wrap items-center gap-6">
+          <Link
+            href="/#try-it"
+            className="rounded-md bg-[#0084ff] px-7 py-3.5 text-base font-medium text-white transition-colors hover:bg-[#0066cc]"
+          >
+            Talk to it now
+          </Link>
+          <Link
+            href="/contact"
+            className="text-sm font-medium text-blue-300 hover:text-blue-200"
+          >
+            Get a free demo built for your business →
+          </Link>
+        </div>
+      </section>
+
+      {/* What a missed call actually costs */}
+      <section className="border-y border-white/10 bg-white/[0.02]">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          <h2 className="max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+            What a missed call actually costs
+          </h2>
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            {costs.map((c) => (
+              <div
+                key={c.title}
+                className="rounded-2xl border border-white/10 bg-[#121417] p-6"
+              >
+                <h3 className="text-lg font-semibold">{c.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/55">{c.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Honesty section */}
-      <section className="border-y border-white/10 bg-white/[0.02]">
+      <section className="border-b border-white/10">
         <div className="mx-auto max-w-6xl px-6 py-24">
           <div className="grid items-start gap-12 lg:grid-cols-2">
             <div>
@@ -208,7 +223,10 @@ export default function Home() {
               href="/#try-it"
               className="rounded-md bg-[#0084ff] px-7 py-3.5 text-base font-medium text-white transition-colors hover:bg-[#0066cc]"
             >
-              🎙 Talk to it now
+              <span className="inline-flex items-center gap-2.5">
+                <Mic className="h-5 w-5" />
+                Talk to it now
+              </span>
             </Link>
             <p className="text-sm text-white/50">
               <Link href="/contact" className="text-blue-300 hover:text-blue-200">
