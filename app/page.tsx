@@ -1,5 +1,16 @@
 import Link from "next/link";
-import { Mic } from "lucide-react";
+import {
+  Mic,
+  PhoneIncoming,
+  AudioLines,
+  ClipboardList,
+  MessageSquareText,
+  CalendarCheck,
+  Database,
+  BellRing,
+  ArrowRight,
+  ArrowDown,
+} from "lucide-react";
 import { AnswerlineHero } from "@/components/ui/hero-landing-page";
 
 const steps = [
@@ -87,20 +98,70 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="mt-12 rounded-2xl border border-blue-500/25 bg-blue-500/[0.07] p-6 sm:p-7">
+        {/* Eco map — how the agent plugs into everything */}
+        <div className="mt-14 rounded-3xl border border-white/10 bg-white/[0.02] p-6 sm:p-9">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-blue-400">
-            And that&rsquo;s just the starter
+            The full picture
           </p>
-          <p className="mt-3 leading-relaxed text-white/75">
-            Answer, capture, text — that&rsquo;s the base package: the lowest-cost
-            way to stop missing jobs, and for most one-man bands it&rsquo;s all you
-            need. But it can do everything a receptionist does. Book jobs
-            straight into your calendar. Set and confirm appointments. Load
-            every call into your CRM or job-management software. Handle the
-            front desk end to end — a custom build, shaped around exactly how
-            you run.
+          <h3 className="mt-2 text-xl font-semibold tracking-tight sm:text-2xl">
+            One agent, wired into how you run
+          </h3>
+
+          {/* Base flow */}
+          <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
+            Base package — answer · capture · text
           </p>
-          <p className="mt-3 text-sm text-white/50">
+          <div className="mt-4 flex flex-col items-stretch gap-3 lg:flex-row lg:items-center">
+            {[
+              { icon: PhoneIncoming, title: "Customer rings", body: "You're on the tools or it's after hours." },
+              { icon: AudioLines, title: "The agent answers", body: "First ring, natural Kiwi voice, knows your business." },
+              { icon: ClipboardList, title: "Captures the job", body: "What, where, how urgent, best number." },
+              { icon: MessageSquareText, title: "Texts you the job", body: "In your pocket seconds after they hang up." },
+            ].map((n, i, arr) => (
+              <div key={n.title} className="contents">
+                <div className="flex-1 rounded-2xl border border-blue-500/30 bg-[#101318] p-4">
+                  <n.icon className="h-5 w-5 text-blue-400" />
+                  <p className="mt-2.5 text-sm font-semibold">{n.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-white/50">{n.body}</p>
+                </div>
+                {i < arr.length - 1 && (
+                  <div className="flex justify-center lg:block">
+                    <ArrowDown className="h-4 w-4 shrink-0 text-blue-500/60 lg:hidden" />
+                    <ArrowRight className="hidden h-4 w-4 shrink-0 text-blue-500/60 lg:block" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Junction into the custom layer */}
+          <div className="my-5 flex items-center gap-4">
+            <div className="h-px flex-1 border-t border-dashed border-white/15" />
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
+              Custom package — the same agent runs your whole front desk
+            </p>
+            <div className="h-px flex-1 border-t border-dashed border-white/15" />
+          </div>
+
+          {/* Custom layer */}
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[
+              { icon: CalendarCheck, title: "Books the appointment", body: "Real bookings straight into your calendar — not just messages." },
+              { icon: Database, title: "Loads your CRM", body: "Every call lands in your CRM or job software, no retyping." },
+              { icon: BellRing, title: "Confirms & reminds", body: "Texts the customer their booking and chases the no-shows." },
+            ].map((n) => (
+              <div key={n.title} className="rounded-2xl border border-dashed border-white/20 bg-[#0e1013] p-4">
+                <n.icon className="h-5 w-5 text-white/70" />
+                <p className="mt-2.5 text-sm font-semibold text-white/85">{n.title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-white/45">{n.body}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-6 text-sm leading-relaxed text-white/55">
+            The base package is the lowest-cost way to stop missing jobs — and
+            for most one-man bands it&rsquo;s all you need. The custom build does
+            everything a receptionist does, shaped around exactly how you run.
             Start simple, add the rest when you want it.
           </p>
         </div>
