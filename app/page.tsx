@@ -87,7 +87,24 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="mt-14 flex flex-wrap items-center gap-6">
+        <div className="mt-12 rounded-2xl border border-blue-500/25 bg-blue-500/[0.07] p-6 sm:p-7">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-blue-400">
+            And that&rsquo;s just the starter
+          </p>
+          <p className="mt-3 leading-relaxed text-white/75">
+            Answer, capture, text — that&rsquo;s the base package: the lowest-cost
+            way to stop missing jobs, and for most one-man bands it&rsquo;s all you
+            need. But it can do everything a receptionist does. Book jobs
+            straight into your calendar. Set and confirm appointments. Load
+            every call into your CRM or job-management software. Handle the
+            front desk end to end — a custom build, shaped around exactly how
+            you run.
+          </p>
+          <p className="mt-3 text-sm text-white/50">
+            Start simple, add the rest when you want it.
+          </p>
+        </div>
+        <div className="mt-10 flex flex-wrap items-center gap-6">
           <Link
             href="/#try-it"
             className="rounded-md bg-[#0084ff] px-7 py-3.5 text-base font-medium text-white transition-colors hover:bg-[#0066cc]"
